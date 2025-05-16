@@ -44,8 +44,8 @@ public class TemplateEditPanel {
     private JLabel previewLabel;
     private JPanel previewPanel;
     private JCheckBox typeCheckBox;
-    private JCheckBox scopeCheckBox;
-    private JCheckBox subjectCheckBox;
+    private JCheckBox changeIdCheckBox;
+    private JCheckBox businessCheckBox;
     private JCheckBox bodyCheckBox;
     private JCheckBox changesCheckBox;
     private JCheckBox closedCheckBox;
@@ -112,8 +112,8 @@ public class TemplateEditPanel {
             }
         });
         typeCheckBox.addChangeListener(e -> showPreview());
-        scopeCheckBox.addChangeListener(e -> showPreview());
-        subjectCheckBox.addChangeListener(e -> showPreview());
+        changeIdCheckBox.addChangeListener(e -> showPreview());
+        businessCheckBox.addChangeListener(e -> showPreview());
         bodyCheckBox.addChangeListener(e -> showPreview());
         changesCheckBox.addChangeListener(e -> showPreview());
         closedCheckBox.addChangeListener(e -> showPreview());
@@ -159,24 +159,24 @@ public class TemplateEditPanel {
         if (typeCheckBox.isSelected()) {
             commitTemplate.setType("<type>");
         }
-        if (scopeCheckBox.isSelected()) {
-            commitTemplate.setScope("<scope>");
+        if (changeIdCheckBox.isSelected()) {
+            commitTemplate.setChangeId("<changeId>");
         }
-        if (subjectCheckBox.isSelected()) {
-            commitTemplate.setSubject("<subject>");
+        if (businessCheckBox.isSelected()) {
+            commitTemplate.setBusiness("<business>");
         }
         if (bodyCheckBox.isSelected()) {
             commitTemplate.setBody("<body>");
         }
-        if (changesCheckBox.isSelected()) {
-            commitTemplate.setChanges("<changes>");
-        }
-        if (closedCheckBox.isSelected()) {
-            commitTemplate.setCloses("<closes>");
-        }
-        if (skipCiCheckBox.isSelected()) {
-            commitTemplate.setSkipCi("<skipCi>");
-        }
+//        if (changesCheckBox.isSelected()) {
+//            commitTemplate.setChanges("<changes>");
+//        }
+//        if (closedCheckBox.isSelected()) {
+//            commitTemplate.setCloses("<closes>");
+//        }
+//        if (skipCiCheckBox.isSelected()) {
+//            commitTemplate.setSkipCi("<skipCi>");
+//        }
         ApplicationManager.getApplication().runWriteAction(() -> {
             String previewTemplate = templateEditor.getDocument().getText().replaceAll("\\n", "");
             previewEditor.getDocument().setText(VelocityUtils.convert(previewTemplate, commitTemplate));

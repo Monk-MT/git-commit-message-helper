@@ -1,12 +1,18 @@
 package com.fulinlin.model;
 
+import com.fulinlin.model.enums.PlatformDisplayStyleEnum;
 import com.fulinlin.model.enums.TypeDisplayStyleEnum;
+import org.apache.batik.util.Platform;
 
 public class CentralSettings {
 
     private TypeDisplayStyleEnum typeDisplayStyle;
 
+    private PlatformDisplayStyleEnum platformDisplayStyle;
+
     private Integer typeDisplayNumber;
+
+    private Integer platformDisplayNumber;
 
     private String skipCiDefaultValue;
 
@@ -25,12 +31,28 @@ public class CentralSettings {
         this.typeDisplayStyle = typeDisplayStyle;
     }
 
+    public PlatformDisplayStyleEnum getPlatformDisplayStyle() {
+        return platformDisplayStyle;
+    }
+
+    public void setPlatformDisplayStyle(PlatformDisplayStyleEnum platformDisplayStyle) {
+        this.platformDisplayStyle = platformDisplayStyle;
+    }
+
     public Integer getTypeDisplayNumber() {
         return typeDisplayNumber;
     }
 
     public void setTypeDisplayNumber(Integer typeDisplayNumber) {
         this.typeDisplayNumber = typeDisplayNumber;
+    }
+
+    public Integer getPlatformDisplayNumber() {
+        return platformDisplayNumber;
+    }
+
+    public void setPlatformDisplayNumber(Integer platformDisplayNumber) {
+        this.platformDisplayNumber = platformDisplayNumber;
     }
 
     public String getSkipCiDefaultValue() {
@@ -67,12 +89,13 @@ public class CentralSettings {
 
     public static class Hidden {
         private Boolean type;
-        private Boolean scope;
-        private Boolean subject;
+        private Boolean platform;
+        private Boolean changeId;
+        private Boolean business;
         private Boolean body;
-        private Boolean changes;
-        private Boolean closed;
-        private Boolean skipCi;
+//        private Boolean changes;
+//        private Boolean closed;
+//        private Boolean skipCi;
 
         public Boolean getType() {
             return type;
@@ -82,20 +105,28 @@ public class CentralSettings {
             this.type = type;
         }
 
-        public Boolean getScope() {
-            return scope;
+        public Boolean getPlatform() {
+            return platform;
         }
 
-        public void setScope(Boolean scope) {
-            this.scope = scope;
+        public void setPlatform(Boolean platform) {
+            this.platform = platform;
         }
 
-        public Boolean getSubject() {
-            return subject;
+        public Boolean getChangeId() {
+            return changeId;
         }
 
-        public void setSubject(Boolean subject) {
-            this.subject = subject;
+        public void setChangeId(Boolean changeId) {
+            this.changeId = changeId;
+        }
+
+        public Boolean getBusiness() {
+            return business;
+        }
+
+        public void setBusiness(Boolean business) {
+            this.business = business;
         }
 
         public Boolean getBody() {
@@ -106,29 +137,29 @@ public class CentralSettings {
             this.body = body;
         }
 
-        public Boolean getChanges() {
-            return changes;
-        }
-
-        public void setChanges(Boolean changes) {
-            this.changes = changes;
-        }
-
-        public Boolean getClosed() {
-            return closed;
-        }
-
-        public void setClosed(Boolean closed) {
-            this.closed = closed;
-        }
-
-        public Boolean getSkipCi() {
-            return skipCi;
-        }
-
-        public void setSkipCi(Boolean skipCi) {
-            this.skipCi = skipCi;
-        }
+//        public Boolean getChanges() {
+//            return changes;
+//        }
+//
+//        public void setChanges(Boolean changes) {
+//            this.changes = changes;
+//        }
+//
+//        public Boolean getClosed() {
+//            return closed;
+//        }
+//
+//        public void setClosed(Boolean closed) {
+//            this.closed = closed;
+//        }
+//
+//        public Boolean getSkipCi() {
+//            return skipCi;
+//        }
+//
+//        public void setSkipCi(Boolean skipCi) {
+//            this.skipCi = skipCi;
+//        }
     }
 
 }

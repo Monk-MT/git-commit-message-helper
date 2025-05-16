@@ -36,12 +36,10 @@ public class VelocityUtils {
         StringWriter writer = new StringWriter();
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("type", commitTemplate.getType());
-        velocityContext.put("scope", commitTemplate.getScope());
-        velocityContext.put("subject", commitTemplate.getSubject());
+        velocityContext.put("platform", commitTemplate.getPlatform());
+        velocityContext.put("changeId", commitTemplate.getChangeId());
+        velocityContext.put("business", commitTemplate.getBusiness());
         velocityContext.put("body", commitTemplate.getBody());
-        velocityContext.put("changes", commitTemplate.getChanges());
-        velocityContext.put("closes", commitTemplate.getCloses());
-        velocityContext.put("skipCi", commitTemplate.getSkipCi());
         velocityContext.put("newline", "\n");
         velocityContext.put("velocityTool", new VelocityTool());
         String VM_LOG_TAG = "GitCommitMessage VelocityUtils";
@@ -57,11 +55,12 @@ public class VelocityUtils {
     public static String convertDescription(String html) throws TemplateConvertException {
         StringWriter writer = new StringWriter();
         VelocityContext velocityContext = new VelocityContext();
+        // todo modify tip for use
         velocityContext.put("setting.template.description.tip", PluginBundle.get("setting.template.description.tip"));
         velocityContext.put("setting.template.description.predefined.tip", PluginBundle.get("setting.template.description.predefined.tip"));
         velocityContext.put("setting.template.description.type", PluginBundle.get("setting.template.description.type"));
-        velocityContext.put("setting.template.description.scope", PluginBundle.get("setting.template.description.scope"));
-        velocityContext.put("setting.template.description.subject", PluginBundle.get("setting.template.description.subject"));
+        velocityContext.put("setting.template.description.id", PluginBundle.get("setting.template.description.id"));
+        velocityContext.put("setting.template.description.business", PluginBundle.get("setting.template.description.business"));
         velocityContext.put("setting.template.description.body", PluginBundle.get("setting.template.description.body"));
         velocityContext.put("setting.template.description.changes", PluginBundle.get("setting.template.description.changes"));
         velocityContext.put("setting.template.description.closes", PluginBundle.get("setting.template.description.closes"));

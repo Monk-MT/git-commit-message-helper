@@ -188,7 +188,7 @@
                           <text value="closed"/>
                         </properties>
                       </component>
-                      <component id="add05" class="javax.swing.JCheckBox" binding="subjectCheckBox">
+                      <component id="add05" class="javax.swing.JCheckBox" binding="businessCheckBox">
                         <constraints>
                           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -215,7 +215,7 @@
                           <text value="changes"/>
                         </properties>
                       </component>
-                      <component id="b59d4" class="javax.swing.JCheckBox" binding="scopeCheckBox">
+                      <component id="b59d4" class="javax.swing.JCheckBox" binding="changeIdCheckBox">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>

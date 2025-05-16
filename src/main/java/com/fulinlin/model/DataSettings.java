@@ -12,6 +12,7 @@ import java.util.List;
 public class DataSettings {
     private String template;
     private List<TypeAlias> typeAliases;
+    private List<PlatformAlias> platformAliases;
     private List<String> skipCis;
 
     public String getTemplate() {
@@ -29,6 +30,16 @@ public class DataSettings {
     public void setTypeAliases(List<TypeAlias> typeAliases) {
         this.typeAliases = typeAliases;
     }
+
+    public List<PlatformAlias> getPlatformAliases() {
+        return platformAliases;
+    }
+
+    public void setPlatformAliases(List<PlatformAlias> platformAliases) {
+        this.platformAliases = platformAliases;
+    }
+
+    //todo set platformAliases
 
     public List<String> getSkipCis() {
         return skipCis;
