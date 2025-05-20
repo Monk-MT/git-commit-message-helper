@@ -9,7 +9,7 @@ public class CommitTemplate {
 
     private String mType;
     private String mPlatform;
-    private String mChangeId;
+    private String mTaskId;
     private String mBusiness;
     private String mBody;
 //    private String changes;
@@ -32,12 +32,12 @@ public class CommitTemplate {
         this.mPlatform = mPlatform;
     }
 
-    public String getChangeId() {
-        return mChangeId;
+    public String getTaskId() {
+        return mTaskId;
     }
 
-    public void setChangeId(String mChangeId) {
-        this.mChangeId = mChangeId;
+    public void setTaskId(String mTaskId) {
+        this.mTaskId = mTaskId;
     }
 
     public String getBusiness() {

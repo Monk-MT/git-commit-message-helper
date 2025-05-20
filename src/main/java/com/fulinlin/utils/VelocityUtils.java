@@ -37,7 +37,7 @@ public class VelocityUtils {
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("type", commitTemplate.getType());
         velocityContext.put("platform", commitTemplate.getPlatform());
-        velocityContext.put("changeId", commitTemplate.getChangeId());
+        velocityContext.put("taskId", commitTemplate.getTaskId());
         velocityContext.put("business", commitTemplate.getBusiness());
         velocityContext.put("body", commitTemplate.getBody());
         velocityContext.put("newline", "\n");

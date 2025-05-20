@@ -2,7 +2,6 @@ package com.fulinlin.model;
 
 import com.fulinlin.model.enums.PlatformDisplayStyleEnum;
 import com.fulinlin.model.enums.TypeDisplayStyleEnum;
-import org.apache.batik.util.Platform;
 
 public class CentralSettings {
 
@@ -90,12 +89,9 @@ public class CentralSettings {
     public static class Hidden {
         private Boolean type;
         private Boolean platform;
-        private Boolean changeId;
+        private Boolean taskId;
         private Boolean business;
         private Boolean body;
-//        private Boolean changes;
-//        private Boolean closed;
-//        private Boolean skipCi;
 
         public Boolean getType() {
             return type;
@@ -113,12 +109,12 @@ public class CentralSettings {
             this.platform = platform;
         }
 
-        public Boolean getChangeId() {
-            return changeId;
+        public Boolean getTaskId() {
+            return taskId;
         }
 
-        public void setChangeId(Boolean changeId) {
-            this.changeId = changeId;
+        public void setTaskId(Boolean taskId) {
+            this.taskId = taskId;
         }
 
         public Boolean getBusiness() {
@@ -136,30 +132,6 @@ public class CentralSettings {
         public void setBody(Boolean body) {
             this.body = body;
         }
-
-//        public Boolean getChanges() {
-//            return changes;
-//        }
-//
-//        public void setChanges(Boolean changes) {
-//            this.changes = changes;
-//        }
-//
-//        public Boolean getClosed() {
-//            return closed;
-//        }
-//
-//        public void setClosed(Boolean closed) {
-//            this.closed = closed;
-//        }
-//
-//        public Boolean getSkipCi() {
-//            return skipCi;
-//        }
-//
-//        public void setSkipCi(Boolean skipCi) {
-//            this.skipCi = skipCi;
-//        }
     }
 
 }

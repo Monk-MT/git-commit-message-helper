@@ -90,7 +90,7 @@ public class GitCommitMessageHelperSettings implements PersistentStateComponent<
             centralSettings.setHidden(hidden);
             centralSettings.getHidden().setType(Boolean.FALSE);
             centralSettings.getHidden().setPlatform(Boolean.FALSE);
-            centralSettings.getHidden().setChangeId(Boolean.FALSE);
+            centralSettings.getHidden().setTaskId(Boolean.FALSE);
             centralSettings.getHidden().setBusiness(Boolean.FALSE);
             centralSettings.getHidden().setBody(Boolean.FALSE);
 //            centralSettings.getHidden().setClosed(Boolean.FALSE);

@@ -11,7 +11,7 @@ public class GitCommitConstants {
 
     public static final String DEFAULT_TEMPLATE = "#if($type)${type}#end\n"+
             "#if($platform)(${platform}#end\n" +
-            "#if($changeId) ${changeId})#end\n" +
+            "#if($taskId) ${taskId})#end\n" +
             "#if($business) [${business}]#end\n" +
             "#if($body) ${body}#end\n";
 }

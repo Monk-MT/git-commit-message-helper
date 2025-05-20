@@ -18,35 +18,26 @@ public class CommitMessage {
     public CommitMessage(GitCommitMessageHelperSettings settings,
                          TypeAlias typeAlias,
                          PlatformAlias platformAlias,
-                         String changeId,
+                         String taskId,
                          String business,
                          String longDescription
-//                         String closedIssues,
-//                         String breakingChanges,
-//                         String skipCi
     ) {
         this.content = buildContent(
                 settings,
                 typeAlias,
                 platformAlias,
-                changeId,
+                taskId,
                 business,
                 longDescription
-//                breakingChanges,
-//                closedIssues,
-//                skipCi
         );
     }
 
     private String buildContent(GitCommitMessageHelperSettings settings,
                                 TypeAlias typeAlias,
                                 PlatformAlias platformAlias,
-                                String changeId,
+                                String taskId,
                                 String business,
                                 String longDescription
-//                                String breakingChanges,
-//                                String closedIssues,
-//                                String skipCi
     ) {
 
         CommitTemplate commitTemplate = new CommitTemplate();
@@ -60,8 +51,8 @@ public class CommitMessage {
                 commitTemplate.setPlatform(platformAlias.getTitle());
             }
         }
-        if (StringUtils.isNotBlank(changeId)) {
-            commitTemplate.setChangeId(changeId);
+        if (StringUtils.isNotBlank(taskId)) {
+            commitTemplate.setTaskId(taskId);
         }
         if (StringUtils.isNotBlank(business)) {
             commitTemplate.setBusiness(business);
@@ -69,15 +60,6 @@ public class CommitMessage {
         if (StringUtils.isNotBlank(longDescription)) {
             commitTemplate.setBody(longDescription);
         }
-//        if (StringUtils.isNotBlank(breakingChanges)) {
-//            commitTemplate.setChanges(breakingChanges);
-//        }
-//        if (StringUtils.isNotBlank(closedIssues)) {
-//            commitTemplate.setCloses(closedIssues);
-//        }
-//        if (StringUtils.isNotBlank(skipCi)) {
-//            commitTemplate.setSkipCi(skipCi);
-//        }
         String template = settings.getDateSettings().getTemplate().replaceAll("\\n", "");
         return VelocityUtils.convert(template, commitTemplate);
     }

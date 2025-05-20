@@ -1,8 +1,6 @@
 package com.fulinlin.ui.central;
 
 import com.fulinlin.localization.PluginBundle;
-import com.fulinlin.model.DataSettings;
-import com.fulinlin.model.PlatformAlias;
 import com.fulinlin.model.enums.PlatformDisplayStyleEnum;
 import com.fulinlin.model.enums.TypeDisplayStyleEnum;
 import com.fulinlin.storage.GitCommitMessageHelperSettings;
@@ -11,7 +9,6 @@ import com.intellij.ui.JBIntSpinner;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
-import java.util.List;
 
 public class CentralSettingPanel {
     protected GitCommitMessageHelperSettings settings;
@@ -27,25 +24,19 @@ public class CentralSettingPanel {
     private JRadioButton platformRadioRadioButton;
     private JRadioButton platformMixingRadioButton;
     private JBIntSpinner platformDisplayNumberSpinner;
-//    private JCheckBox skipCiEnableCheckBox;
-//    private JComboBox<String> skipCiComboBox;
-//    private JCheckBox skipCiDefaultApproveCheckedBox;
+
 
     //********************* hidden *********************//
     private JCheckBox typeCheckBox;
     private JCheckBox platformCheckBox;
-    private JCheckBox changeIdCheckBox;
+    private JCheckBox taskIdCheckBox;
     private JCheckBox businessCheckBox;
     private JCheckBox bodyCheckBox;
-    //    private JCheckBox changesCheckBox;
-    //    private JCheckBox closedCheckBox;
-    //    private JCheckBox skipCiCheckBox;
+
     private JLabel typeDiskPlayStyleLabel;
     private JLabel typeDisplayNumberLabel;
     private JLabel platformDisplayNumberLabel;
     private JLabel platformDiskPlayStyleLabel;
-//    private JLabel skipCiDefaultValueLabel;
-//    private JLabel skipEnableComboboxLabel;
 
 
     public CentralSettingPanel(GitCommitMessageHelperSettings settings) {
@@ -77,31 +68,43 @@ public class CentralSettingPanel {
         typeComboboxRadioButton.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 typeDisplayNumberSpinner.setEnabled(false);
+                typeRadioRadioButton.setSelected(false);
+                typeMixingRadioButton.setSelected(false);
             }
         });
         typeRadioRadioButton.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 typeDisplayNumberSpinner.setEnabled(true);
+                typeComboboxRadioButton.setSelected(false);
+                typeMixingRadioButton.setSelected(false);
             }
         });
         typeMixingRadioButton.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 typeDisplayNumberSpinner.setEnabled(true);
+                typeComboboxRadioButton.setSelected(false);
+                typeRadioRadioButton.setSelected(false);
             }
         });
         platformComboboxRadioButton.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 platformDisplayNumberSpinner.setEnabled(false);
+                platformRadioRadioButton.setSelected(false);
+                platformMixingRadioButton.setSelected(false);
             }
         });
         platformRadioRadioButton.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 platformDisplayNumberSpinner.setEnabled(true);
+                platformComboboxRadioButton.setSelected(false);
+                platformMixingRadioButton.setSelected(false);
             }
         });
         platformMixingRadioButton.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 platformDisplayNumberSpinner.setEnabled(true);
+                platformComboboxRadioButton.setSelected(false);
+                platformRadioRadioButton.setSelected(false);
             }
         });
         // Init  Component
@@ -136,7 +139,7 @@ public class CentralSettingPanel {
         // settings.getCentralSettings().getHidden().setSubject(subjectCheckBox.isSelected());
         settings.getCentralSettings().getHidden().setType(typeCheckBox.isSelected());
         settings.getCentralSettings().getHidden().setPlatform(platformCheckBox.isSelected());
-        settings.getCentralSettings().getHidden().setChangeId(changeIdCheckBox.isSelected());
+        settings.getCentralSettings().getHidden().setTaskId(taskIdCheckBox.isSelected());
         settings.getCentralSettings().getHidden().setBusiness(businessCheckBox.isSelected());
         settings.getCentralSettings().getHidden().setBody(bodyCheckBox.isSelected());
         return settings;
@@ -173,7 +176,7 @@ public class CentralSettingPanel {
         // Hidden Option
         typeCheckBox.setSelected(settings.getCentralSettings().getHidden().getType());
         platformCheckBox.setSelected(settings.getCentralSettings().getHidden().getPlatform());
-        changeIdCheckBox.setSelected(settings.getCentralSettings().getHidden().getChangeId());
+        taskIdCheckBox.setSelected(settings.getCentralSettings().getHidden().getTaskId());
         businessCheckBox.setSelected(settings.getCentralSettings().getHidden().getBusiness());
         bodyCheckBox.setSelected(settings.getCentralSettings().getHidden().getBody());
     }
@@ -214,7 +217,7 @@ public class CentralSettingPanel {
             isModified = true;
         } else if (platformCheckBox.isSelected()!= data.getCentralSettings().getHidden().getPlatform()) {
             isModified = true;
-        } else if (changeIdCheckBox.isSelected() != data.getCentralSettings().getHidden().getChangeId()) {
+        } else if (taskIdCheckBox.isSelected() != data.getCentralSettings().getHidden().getTaskId()) {
             isModified = true;
         } else if (businessCheckBox.isSelected()!= data.getCentralSettings().getHidden().getBusiness()) {
             isModified = true;

@@ -44,7 +44,7 @@ public class TemplateEditPanel {
     private JLabel previewLabel;
     private JPanel previewPanel;
     private JCheckBox typeCheckBox;
-    private JCheckBox changeIdCheckBox;
+    private JCheckBox taskIdCheckBox;
     private JCheckBox businessCheckBox;
     private JCheckBox bodyCheckBox;
     private JCheckBox changesCheckBox;
@@ -112,7 +112,7 @@ public class TemplateEditPanel {
             }
         });
         typeCheckBox.addChangeListener(e -> showPreview());
-        changeIdCheckBox.addChangeListener(e -> showPreview());
+        taskIdCheckBox.addChangeListener(e -> showPreview());
         businessCheckBox.addChangeListener(e -> showPreview());
         bodyCheckBox.addChangeListener(e -> showPreview());
         changesCheckBox.addChangeListener(e -> showPreview());
@@ -159,8 +159,8 @@ public class TemplateEditPanel {
         if (typeCheckBox.isSelected()) {
             commitTemplate.setType("<type>");
         }
-        if (changeIdCheckBox.isSelected()) {
-            commitTemplate.setChangeId("<changeId>");
+        if (taskIdCheckBox.isSelected()) {
+            commitTemplate.setTaskId("<taskId>");
         }
         if (businessCheckBox.isSelected()) {
             commitTemplate.setBusiness("<business>");

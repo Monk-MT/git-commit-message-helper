@@ -25,43 +25,31 @@ public class CommitPanel {
     private JPanel mainPanel;
     private JComboBox<TypeAlias> changeType;
     private JComboBox<PlatformAlias> platforms;
-    private JTextField changeId;
+    private JTextField taskId;
     private JTextField business;
     private EditorTextField longDescription;
-//    private EditorTextField breakingChanges;
-//    private JTextField closedIssues;
     private JLabel typeDescriptionLabel;
     private JLabel platformDescriptionLabel;
-    private JLabel changeIdDescriptionLabel;
+    private JLabel taskIdDescriptionLabel;
     private JLabel businessDescriptionLabel;
     private JLabel bodyDescriptionLabel;
-    //    private JLabel closedDescriptionLabel;
-    //    private JLabel changeDescriptionLabel;
     private JPanel typePanel;
     private JPanel platformPanel;
     private JScrollPane longDescriptionScrollPane;
-    //    private JScrollPane breakingChangesScrollPane;
-    //    private JCheckBox approveCheckBox;
-//    private JComboBox<String> skipCiComboBox;
-//    private JLabel skipCiLabel;
     private ButtonGroup typeButtonGroup;
     private ButtonGroup platformButtonGroup;
 
 
     public CommitPanel(Project project, GitCommitMessageHelperSettings settings, CommitTemplate commitMessageTemplate) {
         this.settings = settings;
-        // Personalized UI configuration
         typeDescriptionLabel.setText(PluginBundle.get("commit.panel.type.field"));
         platformDescriptionLabel.setText(PluginBundle.get("commit.panel.platform.field"));
-        changeIdDescriptionLabel.setText(PluginBundle.get("commit.panel.id.field"));
+        taskIdDescriptionLabel.setText(PluginBundle.get("commit.panel.id.field"));
         businessDescriptionLabel.setText(PluginBundle.get("commit.panel.business.field"));
         bodyDescriptionLabel.setText(PluginBundle.get("commit.panel.body.field"));
-//        closedDescriptionLabel.setText(PluginBundle.get("commit.panel.closes.field"));
-//        changeDescriptionLabel.setText(PluginBundle.get("commit.panel.changes.field"));
+
         longDescriptionScrollPane.setBorder(BorderFactory.createEmptyBorder());
-//        breakingChangesScrollPane.setBorder(BorderFactory.createEmptyBorder());
         longDescription.setBorder(new DarculaEditorTextFieldBorder());
-//        breakingChanges.setBorder(new DarculaEditorTextFieldBorder());
         longDescription.setOneLineMode(false);
         longDescription.ensureWillComputePreferredSize();
         longDescription.addSettingsProvider(uEditor -> {
@@ -69,14 +57,7 @@ public class CommitPanel {
             uEditor.setHorizontalScrollbarVisible(true);
             uEditor.setBorder(null);
         });
-//        breakingChanges.setOneLineMode(false);
-//        breakingChanges.ensureWillComputePreferredSize();
-//        breakingChanges.addSettingsProvider(uEditor -> {
-//            uEditor.setVerticalScrollbarVisible(true);
-//            uEditor.setHorizontalScrollbarVisible(true);
-//            uEditor.setBorder(null);
-//        });
-//        approveCheckBox.setText(PluginBundle.get("commit.panel.skip.ci.checkbox"));
+
         settingHidden(commitMessageTemplate);
         computePanelHeight();
     }
@@ -192,7 +173,6 @@ public class CommitPanel {
             }
         }
         
-//        CentralSettings centralSettings = settings.getCentralSettings();
         List<PlatformAlias> platformAliases = settings.getDateSettings().getPlatformAliases();
         if (centralSettings.getHidden().getPlatform()) {
             platformDescriptionLabel.setVisible(false);
@@ -302,50 +282,22 @@ public class CommitPanel {
                 platformPanel.add(platforms);
             }
         }
-        if (centralSettings.getHidden().getChangeId()) {
-            changeIdDescriptionLabel.setVisible(false);
-            changeId.setVisible(false);
+        if (centralSettings.getHidden().getTaskId()) {
+            taskIdDescriptionLabel.setVisible(false);
+            taskId.setVisible(false);
         }
         if (centralSettings.getHidden().getBody()) {
             bodyDescriptionLabel.setVisible(false);
             longDescriptionScrollPane.setVisible(false);
             longDescription.setVisible(false);
         }
-//        if (centralSettings.getHidden().getChanges()) {
-//            changeDescriptionLabel.setVisible(false);
-//            breakingChangesScrollPane.setVisible(false);
-//            breakingChanges.setVisible(false);
-//        }
-//        if (centralSettings.getHidden().getClosed()) {
-//            closedDescriptionLabel.setVisible(false);
-//            closedIssues.setVisible(false);
-//        }
-//        if (centralSettings.getHidden().getSkipCi()) {
-//            skipCiLabel.setVisible(false);
-//            skipCiComboBox.setVisible(false);
-//            approveCheckBox.setVisible(false);
-//        } else {
-//            if (!centralSettings.getSkipCiComboboxEnable()) {
-//                skipCiComboBox.setVisible(false);
-//            }
-//            List<String> skipCis = settings.getDateSettings().getSkipCis();
-//            for (String skipCi : skipCis) {
-//                skipCiComboBox.addItem(skipCi);
-//            }
-//            if (settings.getCentralSettings().getSkipCiDefaultApprove()) {
-//                approveCheckBox.setSelected(true);
-//            }
-//            if (settings.getCentralSettings().getSkipCiDefaultValue() != null) {
-//                skipCiComboBox.setSelectedItem(settings.getCentralSettings().getSkipCiDefaultValue());
-//            }
-//        }
+
         if (commitMessageTemplate != null) {
             // with cache init
-            changeId.setText(commitMessageTemplate.getChangeId());
+            taskId.setText(commitMessageTemplate.getTaskId());
             business.setText(commitMessageTemplate.getBusiness());
             longDescription.setText(commitMessageTemplate.getBody());
-//            breakingChanges.setText(commitMessageTemplate.getChanges());
-//            closedIssues.setText(commitMessageTemplate.getCloses());
+
         }
     }
 
@@ -364,7 +316,7 @@ public class CommitPanel {
         if (platformButtonGroup!= null) {
             height += 33 * platformButtonGroup.getButtonCount();
         }
-        if (!settings.getCentralSettings().getHidden().getChangeId()) {
+        if (!settings.getCentralSettings().getHidden().getTaskId()) {
             height += 33;
         }
         if (!settings.getCentralSettings().getHidden().getBusiness()) {
@@ -374,16 +326,7 @@ public class CommitPanel {
             longDescriptionScrollPane.setPreferredSize(new Dimension(500, 130));
             height += 150;
         }
-//        if (!settings.getCentralSettings().getHidden().getChanges()) {
-//            longDescriptionScrollPane.setPreferredSize(new Dimension(730, 100));
-//            height += 100;
-//        }
-//        if (!settings.getCentralSettings().getHidden().getClosed()) {
-//            height += 43;
-//        }
-//        if (!settings.getCentralSettings().getHidden().getSkipCi()) {
-//            height += 33;
-//        }
+
         mainPanel.setPreferredSize(new Dimension(500, height));
     }
 
@@ -433,29 +376,14 @@ public class CommitPanel {
                 }
             }
         }
-//        String skipCi = "";
-//        if (!settings.getCentralSettings().getHidden().getSkipCi()) {
-//            if (approveCheckBox.isSelected()) {
-//                if (settings.getCentralSettings().getSkipCiComboboxEnable()) {
-//                    if (skipCiComboBox.getSelectedItem() != null) {
-//                        skipCi = skipCiComboBox.getSelectedItem().toString();
-//                    }
-//                } else {
-//                    skipCi = settings.getCentralSettings().getSkipCiDefaultValue();
-//                }
-//            }
-//
-//        }
+
         return new CommitMessage(
                 settings,
                 type,
                 platform,
-                changeId.getText().trim(),
+                taskId.getText().trim(),
                 business.getText().trim(),
                 longDescription.getText().trim()
-//                closedIssues.getText().trim(),
-//                breakingChanges.getText().trim(),
-//                skipCi.trim()
         );
     }
 
@@ -504,25 +432,11 @@ public class CommitPanel {
                 }
             }
         }
-//        String skipCi = "";
-//        if (!settings.getCentralSettings().getHidden().getSkipCi()) {
-//            if (approveCheckBox.isSelected()) {
-//                if (settings.getCentralSettings().getSkipCiComboboxEnable()) {
-//                    if (skipCiComboBox.getSelectedItem() != null) {
-//                        skipCi = skipCiComboBox.getSelectedItem().toString();
-//                    } else {
-//                        skipCi = settings.getCentralSettings().getSkipCiDefaultValue();
-//                    }
-//                }
-//            }
-//
-//        }
-//        commitTemplate.setSkipCi(skipCi.trim());
-        commitTemplate.setChangeId(changeId.getText().trim());
+
+        commitTemplate.setTaskId(taskId.getText().trim());
         commitTemplate.setBusiness(business.getText().trim());
         commitTemplate.setBody(longDescription.getText().trim());
-//        commitTemplate.setChanges(breakingChanges.getText().trim());
-//        commitTemplate.setCloses(closedIssues.getText().trim());
+
         return commitTemplate;
     }
 
