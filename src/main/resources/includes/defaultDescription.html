@@ -29,23 +29,34 @@
     </tr>
     <tr>
         <td valign="top">
-            <nobr><font face="verdana" size="-2"><b>${scope}</b></font></nobr>
+            <nobr><font face="verdana" size="-2"><b>${platform}</b></font></nobr>
         </td>
         <td width="10">&nbsp;</td>
         <td width="100%" valign="top">
             <font face="verdana" size="-1">
-                ${globals.get('setting.template.description.scope')}
+                ${globals.get('setting.template.description.platform')}
             </font>
         </td>
     </tr>
     <tr>
         <td valign="top">
-            <nobr><font face="verdana" size="-2"><b>${subject}</b></font></nobr>
+            <nobr><font face="verdana" size="-2"><b>${taskId}</b></font></nobr>
         </td>
         <td width="10">&nbsp;</td>
         <td width="100%" valign="top">
             <font face="verdana" size="-1">
-                ${globals.get('setting.template.description.subject')}
+                ${globals.get('setting.template.description.id')}
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">
+            <nobr><font face="verdana" size="-2"><b>${business}</b></font></nobr>
+        </td>
+        <td width="10">&nbsp;</td>
+        <td width="100%" valign="top">
+            <font face="verdana" size="-1">
+                ${globals.get('setting.template.description.business')}
             </font>
         </td>
     </tr>
@@ -57,39 +68,6 @@
         <td width="100%" valign="top">
             <font face="verdana" size="-1">
                 ${globals.get('setting.template.description.body')}
-            </font>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top">
-            <nobr><font face="verdana" size="-2"><b>${changes}</b></font></nobr>
-        </td>
-        <td width="10">&nbsp;</td>
-        <td width="100%" valign="top">
-            <font face="verdana" size="-1">
-                ${globals.get('setting.template.description.changes')}
-            </font>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top">
-            <nobr><font face="verdana" size="-2"><b>${closes}</b></font></nobr>
-        </td>
-        <td width="10">&nbsp;</td>
-        <td width="100%" valign="top">
-            <font face="verdana" size="-1">
-                ${globals.get('setting.template.description.closes')}
-            </font>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top">
-            <nobr><font face="verdana" size="-2"><b>${skipCi}</b></font></nobr>
-        </td>
-        <td width="10">&nbsp;</td>
-        <td width="100%" valign="top">
-            <font face="verdana" size="-1">
-                ${globals.get('setting.template.description.skip.ci')}
             </font>
         </td>
     </tr>
@@ -112,5 +90,7 @@
     </a>
     ${globals.get('setting.template.description.used')}
 </font>
+<br />
+<br />
 </body>
 </html>

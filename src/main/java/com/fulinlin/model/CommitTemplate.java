@@ -12,9 +12,6 @@ public class CommitTemplate {
     private String mTaskId;
     private String mBusiness;
     private String mBody;
-//    private String changes;
-//    private String closes;
-//    private String skipCi;
 
     public String getType() {
         return mType;

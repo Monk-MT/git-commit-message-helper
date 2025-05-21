@@ -4,8 +4,7 @@ import com.fulinlin.constant.GitCommitConstants;
 import com.fulinlin.localization.PluginBundle;
 import com.fulinlin.model.CentralSettings;
 import com.fulinlin.model.DataSettings;
-import com.fulinlin.model.PlatformAlias;
-import com.fulinlin.model.TypeAlias;
+import com.fulinlin.model.Alias;
 import com.fulinlin.model.enums.PlatformDisplayStyleEnum;
 import com.fulinlin.model.enums.TypeDisplayStyleEnum;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -83,9 +82,7 @@ public class GitCommitMessageHelperSettings implements PersistentStateComponent<
             centralSettings.setTypeDisplayNumber(-1);
             centralSettings.setPlatformDisplayStyle(PlatformDisplayStyleEnum.CHECKBOX);
             centralSettings.setPlatformDisplayNumber(-1);
-//            centralSettings.setSkipCiDefaultValue("[skip ci]");
-//            centralSettings.setSkipCiDefaultApprove(Boolean.FALSE);
-//            centralSettings.setSkipCiComboboxEnable(Boolean.FALSE);
+            centralSettings.setDefaultBusiness("");
             CentralSettings.Hidden hidden = new CentralSettings.Hidden();
             centralSettings.setHidden(hidden);
             centralSettings.getHidden().setType(Boolean.FALSE);
@@ -93,9 +90,6 @@ public class GitCommitMessageHelperSettings implements PersistentStateComponent<
             centralSettings.getHidden().setTaskId(Boolean.FALSE);
             centralSettings.getHidden().setBusiness(Boolean.FALSE);
             centralSettings.getHidden().setBody(Boolean.FALSE);
-//            centralSettings.getHidden().setClosed(Boolean.FALSE);
-//            centralSettings.getHidden().setChanges(Boolean.FALSE);
-//            centralSettings.getHidden().setSkipCi(Boolean.FALSE);
         } catch (Exception e) {
             log.error("loadDefaultCentralSettings failed", e);
         }
@@ -106,13 +100,10 @@ public class GitCommitMessageHelperSettings implements PersistentStateComponent<
         dataSettings = new DataSettings();
         try {
             dataSettings.setTemplate(GitCommitConstants.DEFAULT_TEMPLATE);
-            List<TypeAlias> typeAliases = getTypeAliases();
-            dataSettings.setTypeAliases(typeAliases);
-            List<PlatformAlias> platformAliases = getPlatformAliases();
+            List<Alias> aliases = getTypeAliases();
+            dataSettings.setTypeAliases(aliases);
+            List<Alias> platformAliases = getPlatformAliases();
             dataSettings.setPlatformAliases(platformAliases);
-
-//            List<String> skipCis = getSkipCis();
-//            dataSettings.setSkipCis(skipCis);
         } catch (Exception e) {
             log.error("loadDefaultDataSettings failed", e);
         }
@@ -123,62 +114,40 @@ public class GitCommitMessageHelperSettings implements PersistentStateComponent<
             dataSettings.setTemplate(GitCommitConstants.DEFAULT_TEMPLATE);
         }
         if (dataSettings.getTypeAliases() == null) {
-            List<TypeAlias> typeAliases = getTypeAliases();
-            dataSettings.setTypeAliases(typeAliases);
+            List<Alias> aliases = getTypeAliases();
+            dataSettings.setTypeAliases(aliases);
         }
-//        if (dataSettings.getSkipCis() == null) {
-//            List<String> skipCis = getSkipCis();
-//            dataSettings.setSkipCis(skipCis);
-//        }
+        if (dataSettings.getPlatformAliases() == null) {
+            List<Alias> aliases = getPlatformAliases();
+            dataSettings.setPlatformAliases(aliases);
+        }
     }
 
 
-//    @NotNull
-//    private static List<String> getSkipCis() {
-//        List<String> skipCis = new LinkedList<>();
-//        skipCis.add("[skip ci]");
-//        skipCis.add("[ci skip]");
-//        skipCis.add("[no ci]");
-//        skipCis.add("[skip actions]");
-//        skipCis.add("[actions skip]");
-//        skipCis.add("skip-checks:true");
-//        skipCis.add("skip-checks: true");
-//        return skipCis;
-//    }
-
     @NotNull
-    private static List<TypeAlias> getTypeAliases() {
-        List<TypeAlias> typeAliases = new LinkedList<>();
+    private static List<Alias> getTypeAliases() {
+        List<Alias> aliases = new LinkedList<>();
         // default init i18n
-        typeAliases.add(new TypeAlias("feature", PluginBundle.get("feat.description")));
-        typeAliases.add(new TypeAlias("bugfix", PluginBundle.get("fix.description")));
-        typeAliases.add(new TypeAlias("optimize", PluginBundle.get("opt.description")));
-        typeAliases.add(new TypeAlias("ui", PluginBundle.get("ui.description")));
-        typeAliases.add(new TypeAlias("tea", PluginBundle.get("tea.description")));
-        typeAliases.add(new TypeAlias("other", PluginBundle.get("other.description")));
-//        typeAliases.add(new TypeAlias("docs", PluginBundle.get("docs.description")));
-//        typeAliases.add(new TypeAlias("style", PluginBundle.get("style.description")));
-//        typeAliases.add(new TypeAlias("refactor", PluginBundle.get("refactor.description")));
-//        typeAliases.add(new TypeAlias("perf", PluginBundle.get("perf.description")));
-//        typeAliases.add(new TypeAlias("test", PluginBundle.get("test.description")));
-//        typeAliases.add(new TypeAlias("build", PluginBundle.get("build.description")));
-//        typeAliases.add(new TypeAlias("ci", PluginBundle.get("ci.description")));
-//        typeAliases.add(new TypeAlias("chore", PluginBundle.get("chore.description")));
-//        typeAliases.add(new TypeAlias("revert", PluginBundle.get("revert.description")));
-        return typeAliases;
+        aliases.add(new Alias("feature", PluginBundle.get("feat.description")));
+        aliases.add(new Alias("bugfix", PluginBundle.get("fix.description")));
+        aliases.add(new Alias("optimize", PluginBundle.get("opt.description")));
+        aliases.add(new Alias("ui", PluginBundle.get("ui.description")));
+        aliases.add(new Alias("tea", PluginBundle.get("tea.description")));
+        aliases.add(new Alias("other", PluginBundle.get("other.description")));
+        return aliases;
     }
 
     @NotNull
-    private static List<PlatformAlias> getPlatformAliases() {
-        List<PlatformAlias> platformAliases = new LinkedList<>();
+    private static List<Alias> getPlatformAliases() {
+        List<Alias> aliases = new LinkedList<>();
 
         // default init i18n
-        platformAliases.add(new PlatformAlias("", PluginBundle.get("blank.description")));
-        platformAliases.add(new PlatformAlias("meegoid", PluginBundle.get("meegoid.description")));
-        platformAliases.add(new PlatformAlias("slardarid", PluginBundle.get("slardarid.description")));
-        platformAliases.add(new PlatformAlias("feedbackid", PluginBundle.get("feedbackid.description")));
+        aliases.add(new Alias("", PluginBundle.get("blank.description")));
+        aliases.add(new Alias("meegoid", PluginBundle.get("meegoid.description")));
+        aliases.add(new Alias("slardarid", PluginBundle.get("slardarid.description")));
+        aliases.add(new Alias("feedbackid", PluginBundle.get("feedbackid.description")));
 
-        return platformAliases;
+        return aliases;
     }
 
 
@@ -186,8 +155,8 @@ public class GitCommitMessageHelperSettings implements PersistentStateComponent<
         dataSettings.setTemplate(template);
     }
 
-    public void updateTypeMap(List<TypeAlias> typeAliases) {
-        dataSettings.setTypeAliases(typeAliases);
+    public void updateTypeMap(List<Alias> aliases) {
+        dataSettings.setTypeAliases(aliases);
     }
 
     /**

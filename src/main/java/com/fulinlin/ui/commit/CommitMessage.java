@@ -1,8 +1,7 @@
 package com.fulinlin.ui.commit;
 
 import com.fulinlin.model.CommitTemplate;
-import com.fulinlin.model.PlatformAlias;
-import com.fulinlin.model.TypeAlias;
+import com.fulinlin.model.Alias;
 import com.fulinlin.storage.GitCommitMessageHelperSettings;
 import com.fulinlin.utils.VelocityUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,15 +15,15 @@ public class CommitMessage {
     private final String content;
 
     public CommitMessage(GitCommitMessageHelperSettings settings,
-                         TypeAlias typeAlias,
-                         PlatformAlias platformAlias,
+                         Alias alias,
+                         Alias platformAlias,
                          String taskId,
                          String business,
                          String longDescription
     ) {
         this.content = buildContent(
                 settings,
-                typeAlias,
+                alias,
                 platformAlias,
                 taskId,
                 business,
@@ -33,17 +32,17 @@ public class CommitMessage {
     }
 
     private String buildContent(GitCommitMessageHelperSettings settings,
-                                TypeAlias typeAlias,
-                                PlatformAlias platformAlias,
+                                Alias alias,
+                                Alias platformAlias,
                                 String taskId,
                                 String business,
                                 String longDescription
     ) {
 
         CommitTemplate commitTemplate = new CommitTemplate();
-        if (typeAlias != null) {
-            if (StringUtils.isNotBlank(typeAlias.getTitle())) {
-                commitTemplate.setType(typeAlias.getTitle());
+        if (alias != null) {
+            if (StringUtils.isNotBlank(alias.getTitle())) {
+                commitTemplate.setType(alias.getTitle());
             }
         }
         if (platformAlias!= null) {

@@ -55,16 +55,13 @@ public class VelocityUtils {
     public static String convertDescription(String html) throws TemplateConvertException {
         StringWriter writer = new StringWriter();
         VelocityContext velocityContext = new VelocityContext();
-        // todo modify tip for use
         velocityContext.put("setting.template.description.tip", PluginBundle.get("setting.template.description.tip"));
         velocityContext.put("setting.template.description.predefined.tip", PluginBundle.get("setting.template.description.predefined.tip"));
         velocityContext.put("setting.template.description.type", PluginBundle.get("setting.template.description.type"));
+        velocityContext.put("setting.template.description.platform", PluginBundle.get("setting.template.description.platform"));
         velocityContext.put("setting.template.description.id", PluginBundle.get("setting.template.description.id"));
         velocityContext.put("setting.template.description.business", PluginBundle.get("setting.template.description.business"));
         velocityContext.put("setting.template.description.body", PluginBundle.get("setting.template.description.body"));
-        velocityContext.put("setting.template.description.changes", PluginBundle.get("setting.template.description.changes"));
-        velocityContext.put("setting.template.description.closes", PluginBundle.get("setting.template.description.closes"));
-        velocityContext.put("setting.template.description.skip.ci", PluginBundle.get("setting.template.description.skip.ci"));
         velocityContext.put("setting.template.description.newLine", PluginBundle.get("setting.template.description.newLine"));
         velocityContext.put("setting.template.description.used", PluginBundle.get("setting.template.description.used"));
         velocityContext.put("globals", velocityContext);

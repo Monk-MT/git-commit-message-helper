@@ -1,11 +1,12 @@
 package com.fulinlin.ui.setting;
 
 import com.fulinlin.localization.PluginBundle;
-import com.fulinlin.model.TypeAlias;
+import com.fulinlin.model.Alias;
 import com.fulinlin.storage.GitCommitMessageHelperSettings;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.table.JBTable;
+import org.apache.tools.ant.taskdefs.Get;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -31,7 +32,11 @@ public class AliasTable extends JBTable {
     private final MyTableModel myTableModel = new MyTableModel();
 
 
-    private final List<TypeAlias> typeAliases = new LinkedList<>();
+    private final List<Alias> aliases = new LinkedList<>();
+
+    public List<Alias> getAliases() {
+        return aliases;
+    }
 
     /**
      * instantiation AliasTable
@@ -76,7 +81,7 @@ public class AliasTable extends JBTable {
         final AliasEditor macroEditor = new AliasEditor(PluginBundle.get("setting.alias.add.title"), "", "");
         if (macroEditor.showAndGet()) {
             final String name = macroEditor.getTitle();
-            typeAliases.add(new TypeAlias(macroEditor.getTitle(), macroEditor.getDescription()));
+            aliases.add(new Alias(macroEditor.getTitle(), macroEditor.getDescription()));
             final int index = indexOfAliasWithName(name);
             log.assertTrue(index >= 0);
             myTableModel.fireTableDataChanged();
@@ -85,14 +90,14 @@ public class AliasTable extends JBTable {
     }
 
     private boolean isValidRow(int selectedRow) {
-        return selectedRow >= 0 && selectedRow < typeAliases.size();
+        return selectedRow >= 0 && selectedRow < aliases.size();
     }
 
     public void moveUp() {
         int selectedRow = getSelectedRow();
         int index1 = selectedRow - 1;
         if (selectedRow != -1) {
-            Collections.swap(typeAliases, selectedRow, index1);
+            Collections.swap(aliases, selectedRow, index1);
         }
         setRowSelectionInterval(index1, index1);
     }
@@ -102,7 +107,7 @@ public class AliasTable extends JBTable {
         int selectedRow = getSelectedRow();
         int index1 = selectedRow + 1;
         if (selectedRow != -1) {
-            Collections.swap(typeAliases, selectedRow, index1);
+            Collections.swap(aliases, selectedRow, index1);
         }
         setRowSelectionInterval(index1, index1);
     }
@@ -116,7 +121,7 @@ public class AliasTable extends JBTable {
         for (int i = selectedRows.length - 1; i >= 0; i--) {
             final int selectedRow = selectedRows[i];
             if (isValidRow(selectedRow)) {
-                typeAliases.remove(selectedRow);
+                aliases.remove(selectedRow);
             }
         }
         myTableModel.fireTableDataChanged();
@@ -130,7 +135,7 @@ public class AliasTable extends JBTable {
 
 
     public void commit(GitCommitMessageHelperSettings settings) {
-        settings.getDateSettings().setTypeAliases(new LinkedList<>(typeAliases));
+
     }
 
     public void resetDefaultAliases() {
@@ -138,24 +143,28 @@ public class AliasTable extends JBTable {
     }
 
     public void reset(GitCommitMessageHelperSettings settings) {
-        obtainAliases(typeAliases, settings);
+        obtainAliases(aliases, settings);
         myTableModel.fireTableDataChanged();
     }
 
 
     private int indexOfAliasWithName(String name) {
-        for (int i = 0; i < typeAliases.size(); i++) {
-            final TypeAlias typeAlias = typeAliases.get(i);
-            if (name.equals(typeAlias.getTitle())) {
+        for (int i = 0; i < aliases.size(); i++) {
+            final Alias alias = aliases.get(i);
+            if (name.equals(alias.getTitle())) {
                 return i;
             }
         }
         return -1;
     }
 
-    private void obtainAliases(@NotNull List<TypeAlias> aliases, GitCommitMessageHelperSettings settings) {
+    private void obtainAliases(@NotNull List<Alias> aliases, GitCommitMessageHelperSettings settings) {
         aliases.clear();
-        aliases.addAll(settings.getDateSettings().getTypeAliases());
+        aliases.addAll(getRecordAliases(settings));
+    }
+
+    public List<Alias> getRecordAliases(GitCommitMessageHelperSettings settings) {
+        return null;
     }
 
     public boolean editAlias() {
@@ -163,20 +172,20 @@ public class AliasTable extends JBTable {
             return false;
         }
         final int selectedRow = getSelectedRow();
-        final TypeAlias typeAlias = typeAliases.get(selectedRow);
-        final AliasEditor editor = new AliasEditor(PluginBundle.get("setting.alias.edit.title"), typeAlias.getTitle(), typeAlias.getDescription());
+        final Alias alias = aliases.get(selectedRow);
+        final AliasEditor editor = new AliasEditor(PluginBundle.get("setting.alias.edit.title"), alias.getTitle(), alias.getDescription());
         if (editor.showAndGet()) {
-            typeAlias.setTitle(editor.getTitle());
-            typeAlias.setDescription(editor.getDescription());
+            alias.setTitle(editor.getTitle());
+            alias.setDescription(editor.getDescription());
             myTableModel.fireTableDataChanged();
         }
         return true;
     }
 
     public boolean isModified(GitCommitMessageHelperSettings settings) {
-        final List<TypeAlias> aliases = new LinkedList<>();
+        final List<Alias> aliases = new LinkedList<>();
         obtainAliases(aliases, settings);
-        return !aliases.equals(typeAliases);
+        return !aliases.equals(this.aliases);
     }
 
     //==========================================================================//
@@ -192,7 +201,7 @@ public class AliasTable extends JBTable {
 
         @Override
         public int getRowCount() {
-            return typeAliases.size();
+            return aliases.size();
         }
 
         @Override
@@ -202,7 +211,7 @@ public class AliasTable extends JBTable {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            final TypeAlias pair = typeAliases.get(rowIndex);
+            final Alias pair = aliases.get(rowIndex);
             switch (columnIndex) {
                 case NAME_COLUMN:
                     return pair.getTitle();

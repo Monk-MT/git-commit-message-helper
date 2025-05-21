@@ -13,11 +13,7 @@ public class CentralSettings {
 
     private Integer platformDisplayNumber;
 
-    private String skipCiDefaultValue;
-
-    private Boolean skipCiDefaultApprove;
-
-    private Boolean skipCiComboboxEnable;
+    private String defaultBusiness;
 
     private Hidden hidden;
 
@@ -54,30 +50,13 @@ public class CentralSettings {
         this.platformDisplayNumber = platformDisplayNumber;
     }
 
-    public String getSkipCiDefaultValue() {
-        return skipCiDefaultValue;
+    public String getDefaultBusiness() {
+        return defaultBusiness;
     }
 
-    public void setSkipCiDefaultValue(String skipCiDefaultValue) {
-        this.skipCiDefaultValue = skipCiDefaultValue;
+    public void setDefaultBusiness(String defaultBusiness) {
+        this.defaultBusiness = defaultBusiness;
     }
-
-    public Boolean getSkipCiDefaultApprove() {
-        return skipCiDefaultApprove;
-    }
-
-    public void setSkipCiDefaultApprove(Boolean skipCiDefaultApprove) {
-        this.skipCiDefaultApprove = skipCiDefaultApprove;
-    }
-
-    public Boolean getSkipCiComboboxEnable() {
-        return skipCiComboboxEnable;
-    }
-
-    public void setSkipCiComboboxEnable(Boolean skipCiComboboxEnable) {
-        this.skipCiComboboxEnable = skipCiComboboxEnable;
-    }
-
     public Hidden getHidden() {
         return hidden;
     }

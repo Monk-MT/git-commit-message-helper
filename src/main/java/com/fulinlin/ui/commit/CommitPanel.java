@@ -3,8 +3,7 @@ package com.fulinlin.ui.commit;
 import com.fulinlin.localization.PluginBundle;
 import com.fulinlin.model.CentralSettings;
 import com.fulinlin.model.CommitTemplate;
-import com.fulinlin.model.PlatformAlias;
-import com.fulinlin.model.TypeAlias;
+import com.fulinlin.model.Alias;
 import com.fulinlin.model.enums.PlatformDisplayStyleEnum;
 import com.fulinlin.model.enums.TypeDisplayStyleEnum;
 import com.fulinlin.storage.GitCommitMessageHelperSettings;
@@ -23,8 +22,8 @@ import java.util.Objects;
 public class CommitPanel {
     private final GitCommitMessageHelperSettings settings;
     private JPanel mainPanel;
-    private JComboBox<TypeAlias> changeType;
-    private JComboBox<PlatformAlias> platforms;
+    private JComboBox<Alias> changeType;
+    private JComboBox<Alias> platforms;
     private JTextField taskId;
     private JTextField business;
     private EditorTextField longDescription;
@@ -36,6 +35,7 @@ public class CommitPanel {
     private JPanel typePanel;
     private JPanel platformPanel;
     private JScrollPane longDescriptionScrollPane;
+    private JButton businessResetButton;
     private ButtonGroup typeButtonGroup;
     private ButtonGroup platformButtonGroup;
 
@@ -44,9 +44,10 @@ public class CommitPanel {
         this.settings = settings;
         typeDescriptionLabel.setText(PluginBundle.get("commit.panel.type.field"));
         platformDescriptionLabel.setText(PluginBundle.get("commit.panel.platform.field"));
-        taskIdDescriptionLabel.setText(PluginBundle.get("commit.panel.id.field"));
+        taskIdDescriptionLabel.setText(PluginBundle.get("commit.panel.taskid.field"));
         businessDescriptionLabel.setText(PluginBundle.get("commit.panel.business.field"));
         bodyDescriptionLabel.setText(PluginBundle.get("commit.panel.body.field"));
+        businessResetButton.setText(PluginBundle.get("commit.panel.business.reset.button"));
 
         longDescriptionScrollPane.setBorder(BorderFactory.createEmptyBorder());
         longDescription.setBorder(new DarculaEditorTextFieldBorder());
@@ -64,18 +65,18 @@ public class CommitPanel {
 
     private void settingHidden(CommitTemplate commitMessageTemplate) {
         CentralSettings centralSettings = settings.getCentralSettings();
-        List<TypeAlias> typeAliases = settings.getDateSettings().getTypeAliases();
+        List<Alias> aliases = settings.getDateSettings().getTypeAliases();
         if (centralSettings.getHidden().getType()) {
             typeDescriptionLabel.setVisible(false);
             typePanel.setVisible(false);
         } else {
             if (centralSettings.getTypeDisplayStyle() == TypeDisplayStyleEnum.CHECKBOX) {
                 changeType = new ComboBox<>();
-                for (TypeAlias type : typeAliases) {
+                for (Alias type : aliases) {
                     changeType.addItem(type);
                 }
                 if (commitMessageTemplate != null) {
-                    typeAliases.stream()
+                    aliases.stream()
                             .filter(typeAlias -> typeAlias.getTitle().equals(commitMessageTemplate.getType()))
                             .findFirst()
                             .ifPresent(typeAlias ->
@@ -89,13 +90,13 @@ public class CommitPanel {
                 typePanel.setLayout(new GridLayout(0, 1));
                 Integer typeDisplayNumber = centralSettings.getTypeDisplayNumber();
                 if (typeDisplayNumber == -1) {
-                    typeDisplayNumber = typeAliases.size();
+                    typeDisplayNumber = aliases.size();
                 }
-                if (typeDisplayNumber > typeAliases.size()) {
-                    typeDisplayNumber = typeAliases.size();
+                if (typeDisplayNumber > aliases.size()) {
+                    typeDisplayNumber = aliases.size();
                 }
                 for (int i = 0; i < typeDisplayNumber; i++) {
-                    TypeAlias type = typeAliases.get(i);
+                    Alias type = aliases.get(i);
                     JRadioButton radioButton = new JRadioButton(type.getTitle() + "-" + type.getDescription());
                     radioButton.setActionCommand(type.getTitle());
                     typeButtonGroup.add(radioButton);
@@ -112,18 +113,18 @@ public class CommitPanel {
                 typeButtonGroup = new ButtonGroup();
                 Integer typeDisplayNumber = centralSettings.getTypeDisplayNumber();
                 if (typeDisplayNumber == -1) {
-                    typeDisplayNumber = typeAliases.size();
+                    typeDisplayNumber = aliases.size();
                 }
-                if (typeDisplayNumber > typeAliases.size()) {
-                    typeDisplayNumber = typeAliases.size();
+                if (typeDisplayNumber > aliases.size()) {
+                    typeDisplayNumber = aliases.size();
                 }
                 for (int i = 0; i < typeDisplayNumber; i++) {
-                    TypeAlias type = typeAliases.get(i);
+                    Alias type = aliases.get(i);
                     JRadioButton radioButton = new JRadioButton(type.getTitle() + "-" + type.getDescription());
                     radioButton.setActionCommand(type.getTitle());
                     radioButton.addChangeListener(e -> {
                         if (radioButton.isSelected()) {
-                            typeAliases.stream()
+                            aliases.stream()
                                     .filter(typeAlias -> typeAlias.getTitle().equals(radioButton.getActionCommand()))
                                     .findFirst()
                                     .ifPresent(typeAlias ->
@@ -141,7 +142,7 @@ public class CommitPanel {
                 }
                 changeType.addActionListener(e -> {
                     if (changeType.getSelectedItem() != null) {
-                        String typeTitle = ((TypeAlias) Objects.requireNonNull(changeType.getSelectedItem())).getTitle();
+                        String typeTitle = ((Alias) Objects.requireNonNull(changeType.getSelectedItem())).getTitle();
                         Iterator<AbstractButton> iterator = typeButtonGroup.getElements().asIterator();
                         boolean flag = false;
                         while (iterator.hasNext()) {
@@ -158,11 +159,11 @@ public class CommitPanel {
                         }
                     }
                 });
-                for (TypeAlias type : typeAliases) {
+                for (Alias type : aliases) {
                     changeType.addItem(type);
                 }
                 if (commitMessageTemplate != null) {
-                    typeAliases.stream()
+                    aliases.stream()
                             .filter(typeAlias -> typeAlias.getTitle().equals(commitMessageTemplate.getType()))
                             .findFirst()
                             .ifPresent(typeAlias ->
@@ -173,22 +174,22 @@ public class CommitPanel {
             }
         }
         
-        List<PlatformAlias> platformAliases = settings.getDateSettings().getPlatformAliases();
+        List<Alias> platformAliases = settings.getDateSettings().getPlatformAliases();
         if (centralSettings.getHidden().getPlatform()) {
             platformDescriptionLabel.setVisible(false);
             platformPanel.setVisible(false);
         } else {
             if (centralSettings.getPlatformDisplayStyle() == PlatformDisplayStyleEnum.CHECKBOX) {
                 platforms = new ComboBox<>();
-                for (PlatformAlias platform : platformAliases) {
+                for (Alias platform : platformAliases) {
                     platforms.addItem(platform);
                 }
                 if (commitMessageTemplate != null) {
                     platformAliases.stream()
-                            .filter(platformAlias -> platformAlias.getTitle().equals(commitMessageTemplate.getPlatform()))
+                            .filter(alias -> alias.getTitle().equals(commitMessageTemplate.getPlatform()))
                             .findFirst()
-                            .ifPresent(platformAlias ->
-                                    platforms.setSelectedItem(platformAlias)
+                            .ifPresent(alias ->
+                                    platforms.setSelectedItem(alias)
                             );
                 }
                 platformPanel.add(platforms);
@@ -204,7 +205,7 @@ public class CommitPanel {
                     platformDisplayNumber = platformAliases.size();
                 }
                 for (int i = 0; i < platformDisplayNumber; i++) {
-                    PlatformAlias platform = platformAliases.get(i);
+                    Alias platform = platformAliases.get(i);
                     JRadioButton radioButton = new JRadioButton(platform.getTitle() + "-" + platform.getDescription());
                     radioButton.setActionCommand(platform.getTitle());
                     platformButtonGroup.add(radioButton);
@@ -228,16 +229,16 @@ public class CommitPanel {
                     platformDisplayNumber = platformAliases.size();
                 }
                 for (int i = 0; i < platformDisplayNumber; i++) {
-                    PlatformAlias platform = platformAliases.get(i);
+                    Alias platform = platformAliases.get(i);
                     JRadioButton radioButton = new JRadioButton(platform.getTitle() + "-" + platform.getDescription());
                     radioButton.setActionCommand(platform.getTitle());
                     radioButton.addChangeListener(e -> {
                         if (radioButton.isSelected()) {
                             platformAliases.stream()
-                                    .filter(platformAlias -> platformAlias.getTitle().equals(radioButton.getActionCommand()))
+                                    .filter(alias -> alias.getTitle().equals(radioButton.getActionCommand()))
                                     .findFirst()
-                                    .ifPresent(platformAlias ->
-                                            platforms.setSelectedItem(platformAlias)
+                                    .ifPresent(alias ->
+                                            platforms.setSelectedItem(alias)
                                     );
                         }
                     });
@@ -251,7 +252,7 @@ public class CommitPanel {
                 }
                 platforms.addActionListener(e -> {
                     if (platforms.getSelectedItem() != null) {
-                        String platformTitle = ((PlatformAlias) Objects.requireNonNull(platforms.getSelectedItem())).getTitle();
+                        String platformTitle = ((Alias) Objects.requireNonNull(platforms.getSelectedItem())).getTitle();
                         Iterator<AbstractButton> iterator = platformButtonGroup.getElements().asIterator();
                         boolean flag = false;
                         while (iterator.hasNext()) {
@@ -268,15 +269,15 @@ public class CommitPanel {
                         }
                     }
                 });
-                for (PlatformAlias platform : platformAliases) {
+                for (Alias platform : platformAliases) {
                     platforms.addItem(platform);
                 }
                 if (commitMessageTemplate != null) {
                     platformAliases.stream()
-                            .filter(platformAlias -> platformAlias.getTitle().equals(commitMessageTemplate.getPlatform()))
+                            .filter(alias -> alias.getTitle().equals(commitMessageTemplate.getPlatform()))
                             .findFirst()
-                            .ifPresent(platformAlias ->
-                                    platforms.setSelectedItem(platformAlias)
+                            .ifPresent(alias ->
+                                    platforms.setSelectedItem(alias)
                             );
                 }
                 platformPanel.add(platforms);
@@ -297,8 +298,13 @@ public class CommitPanel {
             taskId.setText(commitMessageTemplate.getTaskId());
             business.setText(commitMessageTemplate.getBusiness());
             longDescription.setText(commitMessageTemplate.getBody());
-
+        } else {
+            business.setText(centralSettings.getDefaultBusiness());
         }
+
+        businessResetButton.addActionListener(e -> {
+            business.setText(centralSettings.getDefaultBusiness());
+        });
     }
 
 
@@ -331,48 +337,48 @@ public class CommitPanel {
     }
 
     CommitMessage getCommitMessage(GitCommitMessageHelperSettings settings) {
-        TypeAlias type = new TypeAlias();
+        Alias type = new Alias();
         if (settings.getCentralSettings().getTypeDisplayStyle() == TypeDisplayStyleEnum.CHECKBOX) {
             if (changeType != null) {
                 if (changeType.getSelectedItem() != null) {
-                    type = ((TypeAlias) Objects.requireNonNull(changeType.getSelectedItem()));
+                    type = ((Alias) Objects.requireNonNull(changeType.getSelectedItem()));
                 }
             }
         } else if (settings.getCentralSettings().getTypeDisplayStyle() == TypeDisplayStyleEnum.RADIO) {
             if (typeButtonGroup != null) {
                 if (typeButtonGroup.getSelection() != null) {
                     if (typeButtonGroup.getSelection().getActionCommand() != null) {
-                        type = new TypeAlias(typeButtonGroup.getSelection().getActionCommand(), "");
+                        type = new Alias(typeButtonGroup.getSelection().getActionCommand(), "");
                     }
                 }
             }
         } else if (settings.getCentralSettings().getTypeDisplayStyle() == TypeDisplayStyleEnum.MIXING) {
             if (changeType != null) {
                 if (changeType.getSelectedItem() != null) {
-                    type = ((TypeAlias) Objects.requireNonNull(changeType.getSelectedItem()));
+                    type = ((Alias) Objects.requireNonNull(changeType.getSelectedItem()));
                 }
             }
         }
 
-        PlatformAlias platform = new PlatformAlias();
+        Alias platform = new Alias();
         if (settings.getCentralSettings().getPlatformDisplayStyle() == PlatformDisplayStyleEnum.CHECKBOX) {
             if (platforms != null) {
                 if (platforms.getSelectedItem() != null) {
-                    platform = ((PlatformAlias) Objects.requireNonNull(platforms.getSelectedItem()));
+                    platform = ((Alias) Objects.requireNonNull(platforms.getSelectedItem()));
                 }
             }
         } else if (settings.getCentralSettings().getPlatformDisplayStyle() == PlatformDisplayStyleEnum.RADIO) {
             if (platformButtonGroup != null) {
                 if (platformButtonGroup.getSelection() != null) {
                     if (platformButtonGroup.getSelection().getActionCommand() != null) {
-                        platform = new PlatformAlias(platformButtonGroup.getSelection().getActionCommand(), "");
+                        platform = new Alias(platformButtonGroup.getSelection().getActionCommand(), "");
                     }
                 }
             }
         } else if (settings.getCentralSettings().getPlatformDisplayStyle() == PlatformDisplayStyleEnum.MIXING) {
             if (changeType != null) {
                 if (changeType.getSelectedItem() != null) {
-                    platform = ((PlatformAlias) Objects.requireNonNull(platforms.getSelectedItem()));
+                    platform = ((Alias) Objects.requireNonNull(platforms.getSelectedItem()));
                 }
             }
         }
@@ -392,7 +398,7 @@ public class CommitPanel {
         if (settings.getCentralSettings().getTypeDisplayStyle() == TypeDisplayStyleEnum.CHECKBOX) {
             if (changeType != null) {
                 if (changeType.getSelectedItem() != null) {
-                    commitTemplate.setType(((TypeAlias) Objects.requireNonNull(changeType.getSelectedItem())).getTitle());
+                    commitTemplate.setType(((Alias) Objects.requireNonNull(changeType.getSelectedItem())).getTitle());
                 }
             }
         } else if (settings.getCentralSettings().getTypeDisplayStyle() == TypeDisplayStyleEnum.RADIO) {
@@ -406,7 +412,7 @@ public class CommitPanel {
         } else if (settings.getCentralSettings().getTypeDisplayStyle() == TypeDisplayStyleEnum.MIXING) {
             if (changeType != null) {
                 if (changeType.getSelectedItem() != null) {
-                    commitTemplate.setType(((TypeAlias) Objects.requireNonNull(changeType.getSelectedItem())).getTitle());
+                    commitTemplate.setType(((Alias) Objects.requireNonNull(changeType.getSelectedItem())).getTitle());
                 }
             }
         }
@@ -414,7 +420,7 @@ public class CommitPanel {
         if (settings.getCentralSettings().getPlatformDisplayStyle() == PlatformDisplayStyleEnum.CHECKBOX) {
             if (platforms != null) {
                 if (platforms.getSelectedItem() != null) {
-                    commitTemplate.setPlatform(((PlatformAlias) Objects.requireNonNull(platforms.getSelectedItem())).getTitle());
+                    commitTemplate.setPlatform(((Alias) Objects.requireNonNull(platforms.getSelectedItem())).getTitle());
                 }
             }
         } else if (settings.getCentralSettings().getPlatformDisplayStyle() == PlatformDisplayStyleEnum.RADIO) {
@@ -428,7 +434,7 @@ public class CommitPanel {
         } else if (settings.getCentralSettings().getPlatformDisplayStyle() == PlatformDisplayStyleEnum.MIXING) {
             if (platforms != null) {
                 if (platforms.getSelectedItem() != null) {
-                    commitTemplate.setPlatform(((PlatformAlias) Objects.requireNonNull(platforms.getSelectedItem())).getTitle());
+                    commitTemplate.setPlatform(((Alias) Objects.requireNonNull(platforms.getSelectedItem())).getTitle());
                 }
             }
         }

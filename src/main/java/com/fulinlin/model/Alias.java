@@ -9,16 +9,16 @@ import org.apache.commons.text.StringEscapeUtils;
  * @author: fulin
  * @create: 2019-12-06 21:11
  **/
-public class TypeAlias extends DomainObject {
+public class Alias extends DomainObject {
 
     public String title;
 
     public String description;
 
-    public TypeAlias() {
+    public Alias() {
     }
 
-    public TypeAlias(String title, String description) {
+    public Alias(String title, String description) {
         this.title = StringEscapeUtils.escapeJava(title);
         this.description = StringEscapeUtils.escapeJava(description);
     }
@@ -41,7 +41,13 @@ public class TypeAlias extends DomainObject {
 
     @Override
     public String toString() {
-        return String.format("%s - %s", this.getTitle(), this.getDescription());
+        String result;
+        if (this.getTitle().isEmpty()) {
+            result = String.format("%s", this.getDescription());
+        } else  {
+            result = String.format("%s - %s", this.getTitle(), this.getDescription());
+        }
+        return result;
     }
 
 }

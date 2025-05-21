@@ -4,6 +4,7 @@ import com.fulinlin.localization.PluginBundle;
 import com.fulinlin.model.enums.PlatformDisplayStyleEnum;
 import com.fulinlin.model.enums.TypeDisplayStyleEnum;
 import com.fulinlin.storage.GitCommitMessageHelperSettings;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.JBIntSpinner;
 
@@ -13,18 +14,22 @@ import java.awt.event.ItemEvent;
 public class CentralSettingPanel {
     protected GitCommitMessageHelperSettings settings;
     private JPanel mainPanel;
-    private JPanel hiddenPanel;
     private JPanel typePanel;
+    private JPanel platformPanel;
+    private JPanel businessPanel;
+    private JPanel hiddenPanel;
+
     private JRadioButton typeComboboxRadioButton;
     private JRadioButton typeRadioRadioButton;
     private JRadioButton typeMixingRadioButton;
     private JBIntSpinner typeDisplayNumberSpinner;
-    private JPanel platformPanel;
+
     private JRadioButton platformComboboxRadioButton;
     private JRadioButton platformRadioRadioButton;
     private JRadioButton platformMixingRadioButton;
     private JBIntSpinner platformDisplayNumberSpinner;
 
+    private JTextField defaultBusiness;
 
     //********************* hidden *********************//
     private JCheckBox typeCheckBox;
@@ -45,25 +50,33 @@ public class CentralSettingPanel {
         // Init  description
         typePanel.setBorder(IdeBorderFactory.createTitledBorder(PluginBundle.get("setting.central.type.panel.title"), true));
         platformPanel.setBorder(IdeBorderFactory.createTitledBorder(PluginBundle.get("setting.central.platform.panel.title"), true));
+        businessPanel.setBorder(IdeBorderFactory.createTitledBorder(PluginBundle.get("setting.central.business.panel.title"), true));
         hiddenPanel.setBorder(IdeBorderFactory.createTitledBorder(PluginBundle.get("setting.central.hidden.panel.title"), true));
 
-        // todo is need or not
-//        ButtonGroup buttonGroup = new ButtonGroup();
-//        buttonGroup.add(typeComboboxRadioButton);
-//        buttonGroup.add(typeRadioRadioButton);
-//        buttonGroup.add(typeMixingRadioButton);
         typeDiskPlayStyleLabel.setText(PluginBundle.get("setting.central.type.style"));
+        typeDisplayNumberLabel.setVisible(false);
         typeDisplayNumberLabel.setText(PluginBundle.get("setting.central.type.number"));
+        typeDisplayNumberSpinner.setVisible(false);
         typeDisplayNumberSpinner.setToolTipText(PluginBundle.get("setting.central.type.number.tooltip"));
         typeComboboxRadioButton.setText(PluginBundle.get("setting.central.type.combobox.button"));
         typeRadioRadioButton.setText(PluginBundle.get("setting.central.type.radio.button"));
         typeMixingRadioButton.setText(PluginBundle.get("setting.central.type.mixing.button"));
+
         platformDiskPlayStyleLabel.setText(PluginBundle.get("setting.central.platform.style"));
+        platformDisplayNumberLabel.setVisible(false);
         platformDisplayNumberLabel.setText(PluginBundle.get("setting.central.platform.number"));
+        platformDisplayNumberSpinner.setVisible(false);
         platformDisplayNumberSpinner.setToolTipText(PluginBundle.get("setting.central.platform.number.tooltip"));
         platformComboboxRadioButton.setText(PluginBundle.get("setting.central.platform.combobox.button"));
         platformRadioRadioButton.setText(PluginBundle.get("setting.central.platform.radio.button"));
         platformMixingRadioButton.setText(PluginBundle.get("setting.central.platform.mixing.button"));
+
+        typeCheckBox.setText(PluginBundle.get("commit.panel.type.field").replaceAll(":", ""));
+        platformCheckBox.setText(PluginBundle.get("commit.panel.platform.field").replaceAll(":", ""));
+        taskIdCheckBox.setText(PluginBundle.get("commit.panel.taskid.field").replaceAll(":", ""));
+        businessCheckBox.setText(PluginBundle.get("commit.panel.business.field").replaceAll(":", ""));
+        bodyCheckBox.setText(PluginBundle.get("commit.panel.body.field").replaceAll(":", ""));
+
         // Init
         typeComboboxRadioButton.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -126,17 +139,19 @@ public class CentralSettingPanel {
 
         // platform Display Style Option
         int platformNumber = typeDisplayNumberSpinner.getNumber();
-        if (typeComboboxRadioButton.isSelected()) {
+        if (platformComboboxRadioButton.isSelected()) {
             settings.getCentralSettings().setPlatformDisplayStyle(PlatformDisplayStyleEnum.CHECKBOX);
-        } else if (typeRadioRadioButton.isSelected()) {
+        } else if (platformRadioRadioButton.isSelected()) {
             settings.getCentralSettings().setPlatformDisplayStyle(PlatformDisplayStyleEnum.RADIO);
-        }  else if (typeMixingRadioButton.isSelected()) {
+        }  else if (platformMixingRadioButton.isSelected()) {
             settings.getCentralSettings().setPlatformDisplayStyle(PlatformDisplayStyleEnum.MIXING);
         }
         settings.getCentralSettings().setPlatformDisplayNumber(platformNumber);
 
+        // Default Business Option
+        settings.getCentralSettings().setDefaultBusiness(defaultBusiness.getText());
+
         // Hidden Option
-        // settings.getCentralSettings().getHidden().setSubject(subjectCheckBox.isSelected());
         settings.getCentralSettings().getHidden().setType(typeCheckBox.isSelected());
         settings.getCentralSettings().getHidden().setPlatform(platformCheckBox.isSelected());
         settings.getCentralSettings().getHidden().setTaskId(taskIdCheckBox.isSelected());
@@ -172,7 +187,11 @@ public class CentralSettingPanel {
         } else if (settings.getCentralSettings().getPlatformDisplayStyle().equals(PlatformDisplayStyleEnum.MIXING)) {
             platformMixingRadioButton.setSelected(true);
         }
-        platformDisplayNumberSpinner.setNumber(settings.getCentralSettings().getPlatformDisplayNumber());
+//        platformDisplayNumberSpinner.setNumber(settings.getCentralSettings().getPlatformDisplayNumber());
+
+        // Default Business Option
+        defaultBusiness.setText(settings.getCentralSettings().getDefaultBusiness());
+
         // Hidden Option
         typeCheckBox.setSelected(settings.getCentralSettings().getHidden().getType());
         platformCheckBox.setSelected(settings.getCentralSettings().getHidden().getPlatform());
@@ -209,6 +228,11 @@ public class CentralSettingPanel {
               .equals(PlatformDisplayStyleEnum.MIXING)) {
             isModified = true;
         } else if (platformDisplayNumberSpinner.getNumber()!= data.getCentralSettings().getPlatformDisplayNumber()) {
+            isModified = true;
+        }
+
+        // Default Business Option
+        else if (!StringUtil.equals(defaultBusiness.getText(), data.getCentralSettings().getDefaultBusiness())) {
             isModified = true;
         }
 

@@ -1,7 +1,5 @@
 package com.fulinlin.model;
 
-import b.j.S;
-
 import java.util.List;
 
 /**
@@ -11,9 +9,8 @@ import java.util.List;
  **/
 public class DataSettings {
     private String template;
-    private List<TypeAlias> typeAliases;
-    private List<PlatformAlias> platformAliases;
-    private List<String> skipCis;
+    private List<Alias> typeAliases;
+    private List<Alias> platformAliases;
 
     public String getTemplate() {
         return template;
@@ -23,29 +20,20 @@ public class DataSettings {
         this.template = template;
     }
 
-    public List<TypeAlias> getTypeAliases() {
+    public List<Alias> getTypeAliases() {
         return typeAliases;
     }
 
-    public void setTypeAliases(List<TypeAlias> typeAliases) {
-        this.typeAliases = typeAliases;
+    public void setTypeAliases(List<Alias> aliases) {
+        this.typeAliases = aliases;
     }
 
-    public List<PlatformAlias> getPlatformAliases() {
+    public List<Alias> getPlatformAliases() {
         return platformAliases;
     }
 
-    public void setPlatformAliases(List<PlatformAlias> platformAliases) {
-        this.platformAliases = platformAliases;
+    public void setPlatformAliases(List<Alias> aliases) {
+        this.platformAliases = aliases;
     }
 
-    //todo set platformAliases
-
-    public List<String> getSkipCis() {
-        return skipCis;
-    }
-
-    public void setSkipCis(List<String> skipCis) {
-        this.skipCis = skipCis;
-    }
 }

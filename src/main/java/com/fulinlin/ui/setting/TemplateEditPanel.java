@@ -28,7 +28,8 @@ import java.util.Optional;
 
 
 public class TemplateEditPanel {
-    private final AliasTable aliasTable;
+    private final TypeAliasTable typeAliasTable;
+    private final PlatformAliasTable platformAliasTable;
     private final Editor templateEditor;
     private final EditorTextField previewEditor;
     private final JEditorPane myDescriptionComponent;
@@ -36,6 +37,7 @@ public class TemplateEditPanel {
     private JPanel mainPanel;
     private JPanel templatePanel;
     private JPanel typeEditPanel;
+    private JPanel platformEditPanel;
     private JTabbedPane tabbedPane;
     private JLabel description;
     private JLabel descriptionLabel;
@@ -44,12 +46,10 @@ public class TemplateEditPanel {
     private JLabel previewLabel;
     private JPanel previewPanel;
     private JCheckBox typeCheckBox;
+    private JCheckBox platformCheckBox;
     private JCheckBox taskIdCheckBox;
     private JCheckBox businessCheckBox;
     private JCheckBox bodyCheckBox;
-    private JCheckBox changesCheckBox;
-    private JCheckBox closedCheckBox;
-    private JCheckBox skipCiCheckBox;
     private JButton restoreDefaultsButton;
 
 
@@ -64,6 +64,7 @@ public class TemplateEditPanel {
         previewLabel.setText(PluginBundle.get("setting.template.preview"));
         tabbedPane.setTitleAt(0, PluginBundle.get("setting.tabbed.panel.template"));
         tabbedPane.setTitleAt(1, PluginBundle.get("setting.tabbed.panel.type"));
+        tabbedPane.setTitleAt(2, PluginBundle.get("setting.tabbed.panel.platform"));
         restoreDefaultsButton.setText(PluginBundle.get("setting.template.restore.defaults"));
 
         // Init descriptionPanel
@@ -112,26 +113,41 @@ public class TemplateEditPanel {
             }
         });
         typeCheckBox.addChangeListener(e -> showPreview());
+        platformCheckBox.addChangeListener(e -> showPreview());
         taskIdCheckBox.addChangeListener(e -> showPreview());
         businessCheckBox.addChangeListener(e -> showPreview());
         bodyCheckBox.addChangeListener(e -> showPreview());
-        changesCheckBox.addChangeListener(e -> showPreview());
-        closedCheckBox.addChangeListener(e -> showPreview());
-        skipCiCheckBox.addChangeListener(e -> showPreview());
         // Init  typeEditPanel
-        aliasTable = new AliasTable();
+        typeAliasTable = new TypeAliasTable();
         typeEditPanel.add(
-                ToolbarDecorator.createDecorator(aliasTable)
-                        .setAddAction(button -> aliasTable.addAlias())
-                        .setRemoveAction(button -> aliasTable.removeSelectedAliases())
-                        .setEditAction(button -> aliasTable.editAlias())
-                        .setMoveUpAction(anActionButton -> aliasTable.moveUp())
-                        .setMoveDownAction(anActionButton -> aliasTable.moveDown())
+                ToolbarDecorator.createDecorator(typeAliasTable)
+                        .setAddAction(button -> typeAliasTable.addAlias())
+                        .setRemoveAction(button -> typeAliasTable.removeSelectedAliases())
+                        .setEditAction(button -> typeAliasTable.editAlias())
+                        .setMoveUpAction(anActionButton -> typeAliasTable.moveUp())
+                        .setMoveDownAction(anActionButton -> typeAliasTable.moveDown())
                         .addExtraAction
                                 (new AnActionButton("Reset Default Aliases", AllIcons.Actions.Rollback) {
                                     @Override
                                     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-                                        aliasTable.resetDefaultAliases();
+                                        typeAliasTable.resetDefaultAliases();
+                                    }
+                                }).createPanel(), BorderLayout.CENTER);
+
+        // Init  platformEditPanel
+        platformAliasTable = new PlatformAliasTable();
+        platformEditPanel.add(
+                ToolbarDecorator.createDecorator(platformAliasTable)
+                        .setAddAction(button -> platformAliasTable.addAlias())
+                        .setRemoveAction(button -> platformAliasTable.removeSelectedAliases())
+                        .setEditAction(button -> platformAliasTable.editAlias())
+                        .setMoveUpAction(anActionButton -> platformAliasTable.moveUp())
+                        .setMoveDownAction(anActionButton -> platformAliasTable.moveDown())
+                        .addExtraAction
+                                (new AnActionButton("Reset Default Aliases", AllIcons.Actions.Rollback) {
+                                    @Override
+                                    public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+                                        platformAliasTable.resetDefaultAliases();
                                     }
                                 }).createPanel(), BorderLayout.CENTER);
 
@@ -149,15 +165,25 @@ public class TemplateEditPanel {
         new DoubleClickListener() {
             @Override
             protected boolean onDoubleClick(@NotNull MouseEvent e) {
-                return aliasTable.editAlias();
+                return typeAliasTable.editAlias();
             }
-        }.installOn(aliasTable);
+        }.installOn(typeAliasTable);
+        new DoubleClickListener() {
+            @Override
+            protected boolean onDoubleClick(@NotNull MouseEvent e) {
+                return platformAliasTable.editAlias();
+            }
+        }.installOn(platformEditPanel);
+
     }
 
     private void showPreview() {
         CommitTemplate commitTemplate = new CommitTemplate();
         if (typeCheckBox.isSelected()) {
             commitTemplate.setType("<type>");
+        }
+        if (platformCheckBox.isSelected()) {
+            commitTemplate.setPlatform("<platform>");
         }
         if (taskIdCheckBox.isSelected()) {
             commitTemplate.setTaskId("<taskId>");
@@ -168,15 +194,6 @@ public class TemplateEditPanel {
         if (bodyCheckBox.isSelected()) {
             commitTemplate.setBody("<body>");
         }
-//        if (changesCheckBox.isSelected()) {
-//            commitTemplate.setChanges("<changes>");
-//        }
-//        if (closedCheckBox.isSelected()) {
-//            commitTemplate.setCloses("<closes>");
-//        }
-//        if (skipCiCheckBox.isSelected()) {
-//            commitTemplate.setSkipCi("<skipCi>");
-//        }
         ApplicationManager.getApplication().runWriteAction(() -> {
             String previewTemplate = templateEditor.getDocument().getText().replaceAll("\\n", "");
             previewEditor.getDocument().setText(VelocityUtils.convert(previewTemplate, commitTemplate));
@@ -185,14 +202,16 @@ public class TemplateEditPanel {
 
 
     public GitCommitMessageHelperSettings getSettings() {
-        aliasTable.commit(settings);
+        typeAliasTable.commit(settings);
+        platformAliasTable.commit(settings);
         settings.getDateSettings().setTemplate(templateEditor.getDocument().getText());
         return settings;
     }
 
     public void reset(GitCommitMessageHelperSettings settings) {
         this.settings = settings.clone();
-        aliasTable.reset(settings);
+        typeAliasTable.reset(settings);
+        platformAliasTable.reset(settings);
         ApplicationManager.getApplication().runWriteAction(() ->
                 templateEditor.getDocument().setText(settings.getDateSettings().getTemplate())
         );
@@ -200,7 +219,8 @@ public class TemplateEditPanel {
     }
 
     public boolean isSettingsModified(GitCommitMessageHelperSettings settings) {
-        if (aliasTable.isModified(settings)) return true;
+        if (typeAliasTable.isModified(settings)) return true;
+        if (platformAliasTable.isModified(settings)) return true;
         return isModified(settings);
     }
 
