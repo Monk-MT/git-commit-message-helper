@@ -1,8 +1,8 @@
 <idea-plugin>
     <id>commit-message-helper-idea-plugin</id>
     <name>Git Commit Message Helper</name>
-    <vendor email="fulinlin9527@outlook.com" url="https://github.com/AutismSuperman">FuLinLin</vendor>
-    <version>1.4.1</version>
+    <vendor email="dcar@dcarlife.com" url="https://github.com/dcar">DCar</vendor>
+    <version>1.0.0</version>
 
 
     <description><![CDATA[<p>Description notes will be filled by gradle build</p>]]></description>
@@ -24,17 +24,17 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <applicationService
-                serviceImplementation="com.fulinlin.storage.GitCommitMessageHelperSettings"/>
+                serviceImplementation="com.dcar.storage.GitCommitMessageHelperSettings"/>
         <projectService
-                serviceImplementation="com.fulinlin.storage.GitCommitMessageStorage"/>
+                serviceImplementation="com.dcar.storage.GitCommitMessageStorage"/>
 
         <applicationConfigurable groupId="null"
                                  id="plugins.gitcommitmessagehelper"
                                  displayName="GitCommitMessageHelper"
-                                 instance="com.fulinlin.configurable.CentralSettingConfigurable"/>
+                                 instance="com.dcar.configurable.CentralSettingConfigurable"/>
 
         <applicationConfigurable
-                instance="com.fulinlin.configurable.TemplateConfigurable"
+                instance="com.dcar.configurable.TemplateConfigurable"
                 id="plugins.gitcommitmessagehelper.template"
                 groupId="plugins.gitcommitmessagehelper" displayName="Commit Template"/>
 
@@ -45,7 +45,7 @@
 
 
     <actions>
-        <action id="Commit.Button" class="com.fulinlin.action.CreateCommitAction"
+        <action id="Commit.Button" class="com.dcar.action.CreateCommitAction"
                 text="Create Commit Message"
                 description="Create commit message"
                 icon="PluginIcons.EDIT">
